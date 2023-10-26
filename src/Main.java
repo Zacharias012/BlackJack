@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
@@ -21,7 +23,7 @@ public class Main {
 
 
         // --- Methode Game start
-        gameStart(scanner, bank);
+        gameStart(scanner);
 
 
 
@@ -42,7 +44,12 @@ public class Main {
 
             // --- Count Bank cards
             if (input == 3) {
-                player.countBank();
+                bank.countBank();
+            }
+
+            // --- Count Player cards
+            if (input == 4) {
+                player.countHandCards();
             }
 
             // --- Close Game
@@ -53,21 +60,97 @@ public class Main {
         }
     }
 
-    private static void gameStart(Scanner scanner, Bank bank) {
+    private static void gameStart(Scanner scanner) {
 
         boolean gameStartLoop = true;
 
         while (gameStartLoop) {
             System.out.println("[1] = Game start");
             System.out.println("Kartendeck mischen und zwei Karten für den Spieler und die Bank austeilen");
+
             int input = scanner.nextInt();
 
             if (input == 1) {
-                bank.shuffle();
+                shuffle(Bank.handCardBank, Player.handCardPlayer);
                 gameStartLoop = false;
             } else {
                 System.out.println("Wrong input! Press [1] to start!");
             }
+        }
+    }
+
+
+    // ---
+    // --- ArrayList für Cardpile zum Nachziehen ---
+    // ---
+    static ArrayList<Card> cardPile = new ArrayList<>();
+
+
+    //--------------------------------------------------------------------------------------
+    //          Nachziehstabel wird erstellt
+    //--------------------------------------------------------------------------------------
+
+    public static void shuffle(ArrayList<Card> handCardBank, ArrayList<Card> handCardPlayer) {
+        for (int i = 1; i <= 13; i++) {
+            for (int j = 1; j <= 4; j++) {
+                Card card = new Card(i, j);
+                cardPile.add(card);
+            }
+        }
+
+
+        int numberOfCards = cardPile.size();
+        System.out.println("Kartenanzahl im Nachziehstabel: " + numberOfCards);
+
+        Random random = new Random();
+        int pileSize = cardPile.size();
+
+
+        //--------------------------------------------------------------------------------------
+        //          Zwei Handkarten für die Bank
+        //--------------------------------------------------------------------------------------
+
+        if (pileSize >= 2) {
+            int index1 = random.nextInt(pileSize);
+            int index2;
+            do {
+                index2 = random.nextInt(pileSize);
+            } while (index2 == index1);
+
+            handCardBank.add(cardPile.get(index1));
+            handCardBank.add(cardPile.get(index2));
+
+            cardPile.remove(index2);
+            cardPile.remove(index1);
+
+            System.out.println(handCardBank);
+
+        } else {
+            System.out.println("Nicht genug Karten im Kartenstapel!");
+        }
+
+
+        //--------------------------------------------------------------------------------------
+        //          Zwei Handkarten für den Spieler
+        //--------------------------------------------------------------------------------------
+
+        if (pileSize >= 2) {
+            int index3 = random.nextInt(pileSize);
+            int index4;
+            do {
+                index4 = random.nextInt(pileSize);
+            } while (index3 == index4);
+
+            handCardPlayer.add(cardPile.get(index3));
+            handCardPlayer.add(cardPile.get(index4));
+
+            cardPile.remove(index3);
+            cardPile.remove(index4);
+
+            System.out.println(handCardPlayer);
+
+        } else {
+            System.out.println("Nicht genug Karten im Kartenstapel!");
         }
     }
 }

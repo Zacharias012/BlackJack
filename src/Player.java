@@ -2,14 +2,16 @@ import java.util.ArrayList;
 
 public class Player {
 
+    // ---
     // --- ArrayList für Handkarten des Spielers ---
-    //
-    ArrayList<Card> handCardPlayer = new ArrayList<>();
+    // ---
+    static ArrayList<Card> handCardPlayer = new ArrayList<>();
 
     // --- Instanzvariablen ---
 
     private String name;
     private int score;
+
 
 
     // --- Konstruktor ---
@@ -39,6 +41,7 @@ public class Player {
         System.out.println("[1] = Draw a card");
         System.out.println("[2] = View hand cards");
         System.out.println("[3] = Count hand cards of the Bank");
+        System.out.println("[4] = Count your hand cards");
         System.out.println("[0] = Close game");
         System.out.println();
     }
@@ -53,7 +56,11 @@ public class Player {
         System.out.println(handCardPlayer);
     }
 
-    public void countBank() {
-        System.out.println("Du zählst die Anzahl an Handkarten der Bank");
+    public void countHandCards() {
+        int numberOfCardsPlayer = handCardPlayer.size();
+        System.out.println("Du zählst die Anzahl deiner Handkarten");
+        System.out.println(numberOfCardsPlayer);
     }
+
+
 }
