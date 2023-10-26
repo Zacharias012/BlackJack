@@ -39,7 +39,6 @@ public class Player {
         System.out.println("[1] = Draw a card");
         System.out.println("[2] = View hand cards");
         System.out.println("[3] = Count hand cards of the Bank");
-        System.out.println("[4] = Shuffle cards and deal two");
         System.out.println("[0] = Close game");
         System.out.println();
     }

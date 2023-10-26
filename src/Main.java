@@ -5,7 +5,10 @@ public class Main {
 
         boolean isRunning = true;
 
-        // --- Objekte erstellen
+
+        //------------------------------------------------------------------
+        //                 Objekte erstellen
+        //------------------------------------------------------------------
 
         Scanner scanner = new Scanner(System.in);
         Player player = new Player();
@@ -18,13 +21,14 @@ public class Main {
 
 
         // --- Methode Game start
-        gameStart();
+        gameStart(scanner, bank);
 
 
 
         while (isRunning) {
 
             player.printOptions();
+            int input = scanner.nextInt();
 
             // --- Card draw
             if (input == 1) {
@@ -49,17 +53,28 @@ public class Main {
         }
     }
 
-    private static void gameStart() {
-        System.out.println("[1] = Game start");
-        System.out.println("Kartendeck mischen und zwei für den Spieler und die Bank austeilen");
+    private static void gameStart(Scanner scanner, Bank bank) {
 
-        int input = scanner.nextInt();
+        boolean gameStartLoop = true;
 
-        if (input == 1) {
-            bank.shuffle();
-        } else {
-            System.out.println("Falscher Input! Press [1] to start!");
+        while (gameStartLoop) {
+            System.out.println("[1] = Game start");
+            System.out.println("Kartendeck mischen und zwei Karten für den Spieler und die Bank austeilen");
+            int input = scanner.nextInt();
+
+            if (input == 1) {
+                bank.shuffle();
+                gameStartLoop = false;
+            } else {
+                System.out.println("Wrong input! Press [1] to start!");
+            }
         }
     }
-
 }
+
+
+
+
+
+
+
