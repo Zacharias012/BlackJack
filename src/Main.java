@@ -12,19 +12,22 @@ public class Main {
         //                 Objekte erstellen
         //------------------------------------------------------------------
 
+
         Scanner scanner = new Scanner(System.in);
         Player player = new Player();
         Bank bank = new Bank();
+        Random random = new Random();
+
 
         System.out.println("Geben Sie den Spielernamen ein: ");
         String playerName = scanner.nextLine();
         player.setName(playerName);
         System.out.println("Spielername: " + player.getName());
+        System.out.println();
 
 
         // --- Methode Game start
-        gameStart(scanner);
-
+        gameStart(scanner, random, bank, player);
 
 
         while (isRunning) {
@@ -34,7 +37,8 @@ public class Main {
 
             // --- Card draw
             if (input == 1) {
-                player.drawCard();
+                player.drawCard(random, cardPile, bank.handCardBank);
+                isRunning = player.checkScore(player.handCardPlayer, bank.handCardBank, isRunning);
             }
 
             // --- View hand cards
@@ -42,14 +46,24 @@ public class Main {
                 player.viewHand();
             }
 
-            // --- Count Bank cards
+            // --- View revealed Bank card
             if (input == 3) {
+                bank.viewRevealedBankCard();
+            }
+
+            // --- Count Bank cards
+            if (input == 4) {
                 bank.countBank();
             }
 
             // --- Count Player cards
-            if (input == 4) {
+            if (input == 5) {
                 player.countHandCards();
+            }
+
+            // --- Count cards in Cardpile
+            if (input == 6) {
+                countCardPile();
             }
 
             // --- Close Game
@@ -58,9 +72,14 @@ public class Main {
                 scanner.close();
             }
         }
+
+        //ToDo hier Restart einfügen
+
     }
 
-    private static void gameStart(Scanner scanner) {
+
+
+    private static void gameStart(Scanner scanner, Random random, Bank bank, Player player) {
 
         boolean gameStartLoop = true;
 
@@ -71,7 +90,9 @@ public class Main {
             int input = scanner.nextInt();
 
             if (input == 1) {
-                shuffle(Bank.handCardBank, Player.handCardPlayer);
+
+                shuffle(random, bank.handCardBank, player.handCardPlayer);
+
                 gameStartLoop = false;
             } else {
                 System.out.println("Wrong input! Press [1] to start!");
@@ -79,6 +100,9 @@ public class Main {
         }
     }
 
+    private static void countCardPile() {
+        System.out.println("Kartenanzahl im Nachziehstabel: " + cardPile.size());
+    }
 
     // ---
     // --- ArrayList für Cardpile zum Nachziehen ---
@@ -90,7 +114,7 @@ public class Main {
     //          Nachziehstabel wird erstellt
     //--------------------------------------------------------------------------------------
 
-    public static void shuffle(ArrayList<Card> handCardBank, ArrayList<Card> handCardPlayer) {
+    public static void shuffle(Random random, ArrayList<Card> handCardBank, ArrayList<Card> handCardPlayer) {
         for (int i = 1; i <= 13; i++) {
             for (int j = 1; j <= 4; j++) {
                 Card card = new Card(i, j);
@@ -98,23 +122,17 @@ public class Main {
             }
         }
 
-
-        int numberOfCards = cardPile.size();
-        System.out.println("Kartenanzahl im Nachziehstabel: " + numberOfCards);
-
-        Random random = new Random();
-        int pileSize = cardPile.size();
-
+        countCardPile();
 
         //--------------------------------------------------------------------------------------
         //          Zwei Handkarten für die Bank
         //--------------------------------------------------------------------------------------
 
-        if (pileSize >= 2) {
-            int index1 = random.nextInt(pileSize);
+        if (cardPile.size() >= 2) {
+            int index1 = random.nextInt(cardPile.size());
             int index2;
             do {
-                index2 = random.nextInt(pileSize);
+                index2 = random.nextInt(cardPile.size());
             } while (index2 == index1);
 
             handCardBank.add(cardPile.get(index1));
@@ -123,7 +141,8 @@ public class Main {
             cardPile.remove(index2);
             cardPile.remove(index1);
 
-            System.out.println(handCardBank);
+            System.out.println();
+            System.out.println("[" + handCardBank.get(0) + "] - Die aufgedeckte Karte der Bank. Die zweite Karte bleibt verdeckt!");
 
         } else {
             System.out.println("Nicht genug Karten im Kartenstapel!");
@@ -134,11 +153,11 @@ public class Main {
         //          Zwei Handkarten für den Spieler
         //--------------------------------------------------------------------------------------
 
-        if (pileSize >= 2) {
-            int index3 = random.nextInt(pileSize);
+        if (cardPile.size() >= 2) {
+            int index3 = random.nextInt(cardPile.size());
             int index4;
             do {
-                index4 = random.nextInt(pileSize);
+                index4 = random.nextInt(cardPile.size());
             } while (index3 == index4);
 
             handCardPlayer.add(cardPile.get(index3));
@@ -147,6 +166,7 @@ public class Main {
             cardPile.remove(index3);
             cardPile.remove(index4);
 
+            System.out.println();
             System.out.println(handCardPlayer);
 
         } else {
@@ -154,10 +174,5 @@ public class Main {
         }
     }
 }
-
-
-
-
-
 
 
