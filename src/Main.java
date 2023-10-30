@@ -38,7 +38,7 @@ public class Main {
             // --- Card draw
             if (input == 1) {
                 player.drawCard(random, cardPile, bank.handCardBank);
-                isRunning = player.checkScore(player.handCardPlayer, bank.handCardBank, isRunning);
+                isRunning = player.checkScore(player.handCardPlayer, bank.handCardBank);
             }
 
             // --- View hand cards
@@ -66,15 +66,18 @@ public class Main {
                 countCardPile();
             }
 
+            // --- Check turn and end Game
+            if (input == 7) {
+                player.checkTurn(player.handCardPlayer, bank.handCardBank);
+                isRunning = false;
+            }
+
             // --- Close Game
             if (input == 0) {
                 isRunning = false;
-                scanner.close();
             }
         }
-
-        //ToDo hier Restart einfügen
-
+        scanner.close();
     }
 
 
@@ -167,7 +170,7 @@ public class Main {
             cardPile.remove(index4);
 
             System.out.println();
-            System.out.println(handCardPlayer);
+            System.out.println(handCardPlayer + "- Deine beiden Handkarten");
 
         } else {
             System.out.println("Nicht genug Karten im Kartenstapel!");

@@ -4,7 +4,6 @@ import java.util.Random;
 public class Player {
 
     // --- ToDo: privat machen! & getter mit setter
-    // --- ToDo Option zum Spiel ausstieg wenn z.b. 20 score erreicht wurde
     // --- ToDo Wenn Spiel beendet wurde, option zum Restart aber mit Spielernamen behalten
 
 
@@ -45,6 +44,7 @@ public class Player {
         System.out.println("[4] = Count hand cards of the Bank");
         System.out.println("[5] = Count your hand cards");
         System.out.println("[6] = Count cards in Cardpile");
+        System.out.println("[7] = Check turn");
         System.out.println("[0] = Close game");
         System.out.println();
     }
@@ -87,7 +87,7 @@ public class Player {
     }
 
 
-    public boolean checkScore(ArrayList<Card> handCardPlayer, ArrayList<Card> handCardBank, boolean isRunning) {
+    public boolean checkScore(ArrayList<Card> handCardPlayer, ArrayList<Card> handCardBank) {
         int scorePlayer = 0;
         int scoreBank = 0;
 
@@ -98,39 +98,65 @@ public class Player {
             scoreBank += card.getValue();
         }
 
-        System.out.println(scorePlayer + " = Score Player");    // TODO sout entf.
-        System.out.println(scoreBank + " = Score Bank");      // TODO sout entf.
+        System.out.println(scorePlayer + " = Score Player");    // TODO sout entf.------------------------------
+        System.out.println(scoreBank + " = Score Bank");      // TODO sout entf.--------------------------------
 
-        isRunning = checkWinCon(scorePlayer, scoreBank, isRunning);
+        boolean winConBoolean = checkWinCon(scorePlayer, scoreBank);
 
-        return isRunning;
-
+        return winConBoolean;
     }
 
-    private boolean checkWinCon(int scorePlayer, int scoreBank, boolean isRunning) {
+    private boolean checkWinCon(int scorePlayer, int scoreBank) {
 
         if (scorePlayer == 21 && scoreBank != 21) {
             System.out.println("Gewonnen! " + name + " kommt auf genau 21!");
 
         } else if (scoreBank > 21 && scorePlayer <= 21) {
-            System.out.println("Gewonnen! Bank ist über 21!");
+            System.out.println("Gewonnen! Die Bank ist über 21!");
 
         } else if (scorePlayer > 21 && scoreBank <= 21) {
             System.out.println("Verloren! " + name + " ist über 21!");
 
         } else if (scoreBank == 21 && scorePlayer <= 21) {
-            System.out.println("Verloren! Bank kommt auf genau 21!");
+            System.out.println("Verloren! Die Bank kommt auf genau 21!");
 
         } else if (scorePlayer == 21 && scoreBank == 21) {
-            System.out.println("Unentschieden! " + name + " und Bank sind beide auf genau 21!");
+            System.out.println("Unentschieden! " + name + " und die Bank sind beide auf genau 21!");
 
         } else if (scorePlayer > 21 && scoreBank > 21) {
-            System.out.println("Unentschieden! " + name + " und Bank sind über 21!");
+            System.out.println("Unentschieden! " + name + " und die Bank sind über 21!");
 
         } else {
-            return isRunning; // Keine Gewinn- oder Verlustbedingung erfüllt
+            return true; // Keine Gewinn- oder Verlustbedingung erfüllt
         }
         return false; // Eine Gewinn- oder Verlustbedingung ist erfüllt
+    }
+
+    public void checkTurn(ArrayList<Card> handCardPlayer, ArrayList<Card> handCardBank) {
+        int scorePlayer = 0;
+        int scoreBank = 0;
+
+        for (Card card : handCardPlayer) {
+            scorePlayer += card.getValue();
+        }
+        for (Card card : handCardBank) {
+            scoreBank += card.getValue();
+        }
+
+        System.out.println(scorePlayer + " = Score Player");    // TODO sout entf.----------------------------
+        System.out.println(scoreBank + " = Score Bank");      // TODO sout entf. -----------------------------
+
+
+        int diffPlayer = Math.abs(21 - scorePlayer);
+        int diffBank = Math.abs(21 - scoreBank);
+
+        if (diffPlayer < diffBank) {
+            System.out.println("Gewonnen! " + name + " ist näher an 21!");
+        } else if (diffBank < diffPlayer) {
+            System.out.println("Verloren! Die Bank ist näher an 21!");
+        } else {
+            System.out.println("Unentschieden! " + name + " und die Bank sind gleich nah an 21!");
+        }
     }
 }
 
