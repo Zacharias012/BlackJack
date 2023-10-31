@@ -35,46 +35,37 @@ public class Main {
             player.printOptions();
             int input = scanner.nextInt();
 
-            // --- Card draw
-            if (input == 1) {
-                player.drawCard(random, cardPile, bank.handCardBank);
-                isRunning = player.checkScore(player.handCardPlayer, bank.handCardBank);
-            }
+            switch (input) {
+                case 1:            // --- Card draw
+                    player.drawCard(random, cardPile, bank.handCardBank);
+                    isRunning = player.checkScore(player.handCardPlayer, bank.handCardBank);
+                    break;
+                case 2:            // --- View hand cards
+                    player.viewHand();
+                    break;
+                case 3:            // --- View revealed Bank card
+                    bank.viewRevealedBankCard();
+                    break;
+                case 4:            // --- Count Bank cards
+                    bank.countBank();
+                    break;
+                case 5:            // --- Count Player cards
+                    player.countHandCards();
+                    break;
+                case 6:            // --- Count cards in Cardpile
+                    countCardPile();
+                    break;
+                case 7:            // --- Check turn and end Game
+                    player.checkTurn(player.handCardPlayer, bank.handCardBank);
+                    isRunning = false;
+                    break;
+                case 0:            // --- Close Game
+                    System.out.println("Spiel wird geschlossen...");
+                    isRunning = false;
+                    break;
+                default:
+                    System.out.println("Falscher Input!");
 
-            // --- View hand cards
-            if (input == 2) {
-                player.viewHand();
-            }
-
-            // --- View revealed Bank card
-            if (input == 3) {
-                bank.viewRevealedBankCard();
-            }
-
-            // --- Count Bank cards
-            if (input == 4) {
-                bank.countBank();
-            }
-
-            // --- Count Player cards
-            if (input == 5) {
-                player.countHandCards();
-            }
-
-            // --- Count cards in Cardpile
-            if (input == 6) {
-                countCardPile();
-            }
-
-            // --- Check turn and end Game
-            if (input == 7) {
-                player.checkTurn(player.handCardPlayer, bank.handCardBank);
-                isRunning = false;
-            }
-
-            // --- Close Game
-            if (input == 0) {
-                isRunning = false;
             }
         }
         scanner.close();
